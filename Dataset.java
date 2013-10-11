@@ -3,6 +3,7 @@ import java.util.*;
 
 public class Dataset {
     public String[] labels;
+    public String[] classes;
     public double[][] data;
     public int numAttributes;
     public int size;
@@ -29,12 +30,61 @@ public class Dataset {
         populate(data, labels);
     }
 
+    public Dataset[] split(double[] proportions) {
+        Dataset[] outputs = new Dataset[proportions.length];
+
+        double cumulative = 0;
+        for (int i = 0; i < proportions.length; i++) {
+            int start = ((int) cumulative * this.size);
+            int end = (int) ((cumulative + proportions[i]) * this.size);
+
+            double[][] data = new double[end - start][this.numAttributes];
+            String[] labels = new String[end - start];
+            for (int j = 0; j < end - start; j++) {
+                data[j] = this.data[start + j];
+                labels[j] = this.labels[start + j];
+            }
+            
+            outputs[i] = new Dataset(data, labels);
+
+            cumulative += proportions[i];
+        }
+
+        return outputs;
+    }
+
     private void populate(double[][] data, String[] labels) {
-        this.data = data;
-        this.labels = labels;
+        // Generate indices and shuffle them.
+        ArrayList<Integer> indices = new ArrayList<Integer>();
+        for (int i = 0; i < labels.length; i++) {
+            indices.add(i);
+        }
+        Collections.shuffle(indices);
+
+        double[][] shuffledData = new double[data.length][this.numAttributes];
+        String[] shuffledLabels = new String[labels.length];
+        for (int i = 0; i < indices.size(); i++) {
+            shuffledData[i] = data[indices.get(i)];
+            shuffledLabels[i] = labels[indices.get(i)];
+        }
+
+        this.data = shuffledData;
+        this.labels = shuffledLabels;
         this.numAttributes = this.data[0].length;
         this.size = this.data.length;
+
+        HashSet<String> classes = new HashSet<String>();
+        for (String label : this.labels) {
+            classes.add(label);
+        }
+        this.classes = new String[classes.size()];
+        int i = 0;
+        for (String cls : classes) {
+            this.classes[i] = cls;
+            i++;
+        }
     }
+
 
     public Dataset bootstrap(int n) {
         double[][] bootstrappedData = new double[n][this.numAttributes];
