@@ -11,7 +11,7 @@ classes = [];
 
 % Pixel distance that classifies a key point as near an eye.
 
-radius = 20;
+radius = 10;
 % Load all the data
 [eyes, images] = load_faces();
 for i = 1:length(eyes)
@@ -22,21 +22,28 @@ for i = 1:length(eyes)
     left_eye = repmat(eyes(i, 1:2), npts, 1);
     right_eye = repmat(eyes(i, 3:4), npts, 1);
     locs = features(1:2, :)';
-    left_dists = sum((locs - left_eye)' .^ 2);
-    right_dists = sum((locs - right_eye)' .^ 2);
+    left_dists = sqrt(sum((locs - left_eye)' .^ 2));
+    right_dists = sqrt(sum((locs - right_eye)' .^ 2));
 
-    % Aggregate output.
+    % Compute all classes, and the number of eyes.
     classifications = (left_dists < radius | right_dists < radius);
-    num_eyes = sum(classifications);
 
+    % Select as many non-eyes as eyes to balance the classes.
+    yes_eyes = find(classifications == 1);
+    num_eyes = length(yes_eyes);
     not_eyes = find(classifications == 0);
-    indices = randperm(length(not_eyes))
+    indices = randperm(length(not_eyes));
     not_eyes = not_eyes(indices(1:num_eyes));
 
-    classes = [classes,];
-    vectors = [vectors, descriptors];
+    indices = [yes_eyes, not_eyes];
+    indices = indices(randperm(length(indices)));
+
+    classes = [classes, classifications(indices)];
+    vectors = [vectors, descriptors(:, indices)];
 
     disp(sprintf('Processed image %d...', i));
 end
+
+disp(sprintf('Total points: %d', length(vectors)));
 
 end

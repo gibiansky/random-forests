@@ -35,4 +35,16 @@ public class DecisionForest {
 
         return plurality;
     }
+
+    public double evaluate(Dataset dataset) {
+        int correct = 0;
+        for (int i = 0; i < dataset.size; i++) {
+            String output = this.classify(dataset.data[i]);
+            if (output.equals(dataset.labels[i])) {
+                correct++;
+            }
+        }
+
+        return ((double) correct) / dataset.size;
+    }
 }

@@ -5,7 +5,7 @@ function [eye_positions, imgs] = load_faces()
 % Find the number of files.
 img_dir = 'faces/imgs/*.pgm';
 files = dir(img_dir);
-files = files(1:100);
+files = files(1:300);
 nfiles = length(files);
 
 % Allocate space for images and eye positions.

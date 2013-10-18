@@ -9,5 +9,13 @@ training = splitted(1);
 test = splitted(2);
 
 tree = forests.DecisionTree(training);
-percentage = tree.evaluate(test);
-percentage
+test_percent = tree.evaluate(test);
+train_percent = tree.evaluate(training);
+disp(sprintf('Single Tree Test: %.2f%%', test_percent));
+disp(sprintf('Single Tree Train: %.2f%%', train_percent));
+
+forest = forests.DecisionForest(training, 100, 20);
+test_percent = forest.evaluate(test);
+train_percent = forest.evaluate(training);
+disp(sprintf('100 Tree Forest Test: %.2f%%', test_percent));
+disp(sprintf('100 Tree Forest Train: %.2f%%', train_percent));

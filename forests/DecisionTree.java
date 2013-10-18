@@ -28,9 +28,6 @@ class DecisionTree {
         int correct = 0;
         for (int i = 0; i < dataset.size; i++) {
             String output = this.classify(dataset.data[i]);
-            if(dataset.labels[i].equals("1")) {
-                System.out.println(output + " " + dataset.labels[i]);
-            }
             if (output.equals(dataset.labels[i])) {
                 correct++;
             }
