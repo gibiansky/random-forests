@@ -24,6 +24,21 @@ class DecisionTree {
         return root.classify(data);
     }
 
+    public double evaluate(Dataset dataset) {
+        int correct = 0;
+        for (int i = 0; i < dataset.size; i++) {
+            String output = this.classify(dataset.data[i]);
+            if(dataset.labels[i].equals("1")) {
+                System.out.println(output + " " + dataset.labels[i]);
+            }
+            if (output.equals(dataset.labels[i])) {
+                correct++;
+            }
+        }
+
+        return ((double) correct) / dataset.size;
+    }
+
     private DecisionNode learn(Dataset data, ArrayList<Integer> usedAttributes, int[] examples) {
         if (examples.length < data.size / 25 || usedAttributes.size() == data.numAttributes) {
             return new DecisionLeaf(plurality(data, examples));

@@ -33,6 +33,15 @@ public class Dataset {
         populate(data, labels);
     }
 
+    public Dataset(double[][] data, int[] intLabels) {
+        String[] labels = new String[intLabels.length];
+        for (int i = 0; i < intLabels.length; i++) {
+            labels[i] = "" + intLabels[i];
+        }
+
+        populate(data, labels);
+    }
+
     public Dataset[] split(double[] proportions) {
         Dataset[] outputs = new Dataset[proportions.length];
 

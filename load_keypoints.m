@@ -11,7 +11,7 @@ classes = [];
 
 % Pixel distance that classifies a key point as near an eye.
 
-radius = 15;
+radius = 20;
 % Load all the data
 [eyes, images] = load_faces();
 for i = 1:length(eyes)
@@ -26,7 +26,14 @@ for i = 1:length(eyes)
     right_dists = sum((locs - right_eye)' .^ 2);
 
     % Aggregate output.
-    classes = [classes, (left_dists < radius | right_dists < radius)];
+    classifications = (left_dists < radius | right_dists < radius);
+    num_eyes = sum(classifications);
+
+    not_eyes = find(classifications == 0);
+    indices = randperm(length(not_eyes))
+    not_eyes = not_eyes(indices(1:num_eyes));
+
+    classes = [classes,];
     vectors = [vectors, descriptors];
 
     disp(sprintf('Processed image %d...', i));
