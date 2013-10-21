@@ -1,11 +1,11 @@
 % LOAD_FACES loads all faces from the face database.
 % Returns the eye positions in each face and the images.
-function [eye_positions, imgs] = load_faces()
+function [eye_positions, imgs] = load_faces(nimgs)
 
 % Find the number of files.
 img_dir = 'faces/imgs/*.pgm';
 files = dir(img_dir);
-files = files(1:300);
+files = files(1:nimgs);
 nfiles = length(files);
 
 % Allocate space for images and eye positions.
@@ -18,7 +18,6 @@ counter = 1;
 for file = files'
     filename = ['faces/imgs/', file.name];
     eyefile = ['faces/eyes/', file.name(1:end - 3), 'eye'];
-    image = imread(filename);
     eyecoords = parse_eye(eyefile);
 
     imgs(counter, :, :) = im2single(imread(filename));
@@ -36,5 +35,6 @@ fgetl(fid);
 
 coord_string = fgetl(fid);
 coords = sscanf(coord_string, '%u %u\t %u %u');
+fclose(fid);
 
 end

@@ -8,7 +8,7 @@ class DecisionTree {
     private DecisionNode root;
 
     public DecisionTree(Dataset data) {
-        this(data, 10);
+        this(data, 10000);
     }
 
     public DecisionTree(Dataset data, int subsetSize) {

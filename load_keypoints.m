@@ -1,6 +1,6 @@
 % load_keypoints    Returns a list of feature vectors and their classifications
 % as positive or negative (1 or 0, respcetively).
-function [vectors, classes] = load_keypoints()
+function [vectors, classes] = load_keypoints(nimgs, radius)
 
 % Initialize vl_feat
 run('vlfeat/toolbox/vl_setup');
@@ -9,11 +9,8 @@ run('vlfeat/toolbox/vl_setup');
 vectors = [];
 classes = [];
 
-% Pixel distance that classifies a key point as near an eye.
-
-radius = 10;
 % Load all the data
-[eyes, images] = load_faces();
+[eyes, images] = load_faces(nimgs);
 for i = 1:length(eyes)
     % Apply SIFT and get locations of keypoints.
     [features, descriptors] = vl_sift(squeeze(images(i, :, :)));
